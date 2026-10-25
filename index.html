@@ -1,177 +1,799 @@
 <!doctype html>
+<!--
+  =====================================================================
+  LINHA VIVA DIABETES — Página de apresentação
+  Equipe Linha Viva · Desafios Day · Prefeitura Municipal de Vicência
+  =====================================================================
+
+  COMO ESTE ARQUIVO ESTÁ ORGANIZADO
+  1. <head>   → informações da página, fontes e todo o visual (CSS)
+  2. <body>   → o conteúdo, dividido em seções, na ordem em que aparecem:
+       • Cabeçalho (logo + menu)
+       • Abertura (título principal + exemplo de busca ativa)
+       • O problema
+       • A solução (7 módulos)
+       • Risco do pé diabético (escala IWGDF)
+       • IA assistiva
+       • Implantação (fases e requisitos)
+       • Rodapé (contato)
+
+  Todo o visual fica no bloco <style>. O conteúdo (textos) fica no <body>.
+  Para mudar uma cor do site inteiro, basta trocar a variável em :root.
+-->
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Linha Viva Diabetes</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=Source+Sans+3:wght@400;600;700&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap">
-<style>
-body{margin:0;background:#F2F5F4;color:#12211F;font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;line-height:1.55}
-h1,h2,h3{font-family:"Bricolage Grotesque","Source Sans 3",system-ui,sans-serif;text-wrap:balance;margin:0}
-p{margin:0}
-a{color:#0B6E5F}a:hover{color:#084F45}
-a:focus-visible,button:focus-visible{outline:3px solid #0B6E5F;outline-offset:3px}
-.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
-</style>
+  <!-- Codificação de caracteres: garante que acentos (á, ç, ã) apareçam certo -->
+  <meta charset="utf-8">
+
+  <!-- Faz o site se ajustar à tela do celular -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Título que aparece na aba do navegador -->
+  <title>Linha Viva Diabetes</title>
+
+  <!-- Descrição usada por buscadores e ao compartilhar o link -->
+  <meta name="description" content="Proposta da Equipe Linha Viva para a linha de cuidado das pessoas com diabetes na Atenção Primária de Vicência.">
+
+  <!-- Ícone da aba (favicon): a mesma logo do topo, em versão pequena -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%230B6E5F'/%3E%3Cpath d='M8 26h8l4-10 6 18 4-8h10' fill='none' stroke='%23F6B35A' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <!-- Fontes do Google Fonts:
+       • Bricolage Grotesque → títulos
+       • Source Sans 3       → textos
+       • IBM Plex Mono       → etiquetas pequenas (estilo "dado técnico") -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=Source+Sans+3:wght@400;600;700&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap">
+
+  <style>
+    /* =================================================================
+       1. VARIÁVEIS (cores e fontes do site)
+       Trocar um valor aqui muda o site inteiro.
+       ================================================================= */
+    :root {
+      /* Cores principais */
+      --verde:          #0B6E5F;  /* cor da marca: botões, links, etiquetas */
+      --verde-escuro:   #084F45;  /* verde ao passar o mouse */
+      --verde-claro:    #E3F1ED;  /* fundo do card da Fase 1 */
+      --laranja-claro:  #F6B35A;  /* linha de pulso da logo */
+
+      /* Neutros (fundos e textos) */
+      --fundo:          #F2F5F4;  /* fundo geral da página */
+      --branco:         #FFFFFF;
+      --texto:          #12211F;  /* texto principal (quase preto) */
+      --texto-suave:    #3B4D4A;  /* parágrafos */
+      --texto-apagado:  #5C6E6A;  /* legendas pequenas */
+      --borda:          #D5DEDB;  /* linhas e contornos */
+
+      /* Seções escuras (exemplo de busca ativa, risco, rodapé) */
+      --escuro:         #12211F;
+      --escuro-card:    #1C302D;
+      --escuro-texto:   #B8C9C5;
+      --escuro-legenda: #9FB3AE;
+
+      /* Cores da escala de risco (0 = menor, 3 = maior) */
+      --risco-0: #7FC7B4;
+      --risco-1: #E9D46A;
+      --risco-2: #E9A23B;
+      --risco-3: #E0644A;
+
+      /* Fontes */
+      --fonte-titulo: "Bricolage Grotesque", "Source Sans 3", system-ui, sans-serif;
+      --fonte-texto:  "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --fonte-mono:   "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+      /* Largura máxima do conteúdo */
+      --largura: 1200px;
+    }
+
+    /* =================================================================
+       2. BASE (regras que valem para a página toda)
+       ================================================================= */
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }   /* rolagem suave ao clicar no menu */
+
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font-family: var(--fonte-texto);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--fonte-titulo);
+      margin: 0;
+      text-wrap: balance;   /* equilibra as linhas dos títulos */
+    }
+
+    p, ol { margin: 0; }
+
+    a { color: var(--verde); }
+    a:hover { color: var(--verde-escuro); }
+
+    /* Contorno visível ao navegar pelo teclado (acessibilidade) */
+    a:focus-visible { outline: 3px solid var(--verde); outline-offset: 3px; }
+
+    /* =================================================================
+       3. PEÇAS REUTILIZÁVEIS (usadas em várias seções)
+       ================================================================= */
+
+    /* Caixa central que limita a largura do conteúdo */
+    .container {
+      max-width: var(--largura);
+      margin: 0 auto;
+      padding: 88px 24px;
+    }
+
+    /* Etiqueta pequena em maiúsculas acima dos títulos ("O PROBLEMA") */
+    .etiqueta {
+      font-family: var(--fonte-mono);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--verde);
+    }
+
+    /* Bloco de introdução de cada seção: etiqueta + título + texto */
+    .intro {
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .intro p:not(.etiqueta) { color: var(--texto-suave); }
+
+    /* Título de seção */
+    .titulo-secao {
+      font-size: 42px;
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    /* Botões */
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      min-height: 48px;
+      padding: 0 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .botao-principal { background: var(--verde); color: var(--branco); }
+    .botao-principal:hover { background: var(--verde-escuro); color: var(--branco); }
+    .botao-contorno { border: 2px solid var(--texto); color: var(--texto); }
+    .botao-contorno:hover { background: var(--texto); color: var(--branco); }
+
+    /* =================================================================
+       4. CABEÇALHO (logo + menu)
+       ================================================================= */
+    .cabecalho {
+      background: var(--branco);
+      border-bottom: 1px solid var(--borda);
+      position: sticky;     /* fica preso no topo ao rolar a página */
+      top: 0;
+      z-index: 10;
+    }
+    .cabecalho .container {
+      padding-top: 14px;
+      padding-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    /* Logo: símbolo + nome */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--texto);
+    }
+    .logo:hover { color: var(--texto); }
+    .logo-simbolo { width: 48px; height: 48px; flex: 0 0 auto; }
+    .logo-texto { display: flex; flex-direction: column; line-height: 1; }
+    .logo-nome {
+      font-family: var(--fonte-titulo);
+      font-weight: 800;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+    .logo-sub {
+      font-family: var(--fonte-mono);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--verde);
+      margin-top: 5px;
+    }
+
+    /* Menu de navegação */
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .menu a { color: var(--texto); text-decoration: none; }
+    .menu a:hover { color: var(--verde); }
+
+    /* =================================================================
+       5. ABERTURA (primeira tela)
+       ================================================================= */
+    .abertura { background: var(--branco); }
+    .abertura .container {
+      padding-top: 72px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 56px;
+      align-items: center;
+    }
+    .abertura-texto {
+      flex: 1 1 480px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .abertura h1 {
+      font-size: 60px;
+      line-height: 1.04;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+    .abertura-resumo { font-size: 21px; color: var(--texto-suave); max-width: 560px; }
+    .botoes { display: flex; flex-wrap: wrap; gap: 14px; }
+
+    /* Painel escuro com o exemplo de busca ativa */
+    .painel-exemplo {
+      flex: 1 1 440px;
+      min-width: 0;
+      background: var(--escuro);
+      color: #E8EFED;
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .painel-topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .painel-titulo { font-weight: 700; font-size: 17px; }
+    .painel-aviso { font-family: var(--fonte-mono); font-size: 12px; color: var(--escuro-legenda); }
+    .lista-pacientes { display: flex; flex-direction: column; gap: 10px; }
+
+    /* Cada linha da lista: selo de risco + nome + motivo */
+    .paciente {
+      background: var(--escuro-card);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .paciente-nome { font-weight: 600; }
+    .paciente-motivo { font-size: 15px; color: var(--escuro-texto); }
+    .painel-rodape { font-size: 14px; color: var(--escuro-legenda); }
+
+    /* Selo colorido "RISCO 0…3" */
+    .selo {
+      flex: 0 0 auto;
+      min-width: 74px;
+      text-align: center;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: var(--fonte-mono);
+      font-size: 13px;
+      color: var(--escuro);
+    }
+    .selo.r0 { background: var(--risco-0); }
+    .selo.r1 { background: var(--risco-1); }
+    .selo.r2 { background: var(--risco-2); }
+    .selo.r3 { background: var(--risco-3); }
+
+    /* =================================================================
+       6. O PROBLEMA (3 cartões)
+       ================================================================= */
+    .problema .container { padding-bottom: 40px; display: flex; flex-direction: column; gap: 32px; }
+    .grade-problemas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .cartao {
+      background: var(--branco);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .cartao h3 { font-size: 21px; }
+    .cartao p { color: var(--texto-suave); }
+
+    /* =================================================================
+       7. A SOLUÇÃO (grade com os 7 módulos)
+       ================================================================= */
+    .solucao .container { padding-top: 72px; padding-bottom: 72px; display: flex; flex-direction: column; gap: 32px; }
+    .grade-modulos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1px;                       /* o espaço de 1px vira a linha divisória */
+      background: var(--borda);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .modulo {
+      background: var(--branco);
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .modulo h3 { font-size: 20px; }
+    .modulo p { color: var(--texto-suave); font-size: 17px; }
+    .modulo .quem {                   /* quem usa o módulo */
+      font-family: var(--fonte-mono);
+      font-size: 12px;
+      color: var(--texto-apagado);
+    }
+
+    /* =================================================================
+       8. RISCO DO PÉ DIABÉTICO (seção escura, 4 níveis)
+       ================================================================= */
+    .risco { background: var(--escuro); color: #E8EFED; }
+    .risco .container { display: flex; flex-direction: column; gap: 36px; }
+    .risco .etiqueta { color: var(--risco-0); }
+    .risco .titulo-secao { color: var(--branco); }
+    .risco .intro p:not(.etiqueta) { color: var(--escuro-texto); }
+
+    .grade-risco {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .nivel {
+      background: var(--escuro-card);
+      border-top: 6px solid;          /* a cor vem das classes .r0 a .r3 */
+      border-radius: 0 0 12px 12px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .nivel-nome { font-family: var(--fonte-mono); font-size: 14px; }
+    .nivel-prazo {
+      font-family: var(--fonte-titulo);
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--branco);
+    }
+    .nivel-criterio { font-size: 16px; color: var(--escuro-texto); }
+    .nivel.r0 { border-color: var(--risco-0); } .nivel.r0 .nivel-nome { color: var(--risco-0); }
+    .nivel.r1 { border-color: var(--risco-1); } .nivel.r1 .nivel-nome { color: var(--risco-1); }
+    .nivel.r2 { border-color: var(--risco-2); } .nivel.r2 .nivel-nome { color: var(--risco-2); }
+    .nivel.r3 { border-color: var(--risco-3); } .nivel.r3 .nivel-nome { color: var(--risco-3); }
+
+    /* =================================================================
+       9. IA ASSISTIVA (texto à esquerda, lista à direita)
+       ================================================================= */
+    .ia .container { display: flex; flex-wrap: wrap; gap: 48px; }
+    .ia .intro { flex: 1 1 360px; min-width: 0; }
+    .lista-ia {
+      flex: 1 1 520px;
+      min-width: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid #C7D3CF;
+    }
+    .lista-ia li {
+      padding: 20px 0;
+      border-bottom: 1px solid #C7D3CF;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .lista-ia h3 { font-size: 20px; }
+    .lista-ia p { color: var(--texto-suave); font-size: 17px; }
+
+    /* =================================================================
+       10. IMPLANTAÇÃO (fases + requisitos)
+       ================================================================= */
+    .implantacao { background: var(--branco); border-top: 1px solid var(--borda); }
+    .implantacao .container { display: flex; flex-direction: column; gap: 48px; }
+    .grade-fases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .fase {
+      border-radius: 12px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .fase h3 { font-size: 24px; }
+    .fase p:last-child { color: #2E403C; }
+    .fase-1 { background: var(--verde-claro); }
+    .fase-2 { background: var(--fundo); border: 1px dashed #A9B9B5; }   /* tracejado = fase futura */
+    .fase-2 .etiqueta { color: var(--texto-apagado); }
+
+    .grade-requisitos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+    }
+    .requisito { display: flex; flex-direction: column; gap: 6px; }
+    .requisito h3 { font-size: 19px; }
+    .requisito p { color: var(--texto-suave); font-size: 17px; }
+
+    /* =================================================================
+       11. RODAPÉ
+       ================================================================= */
+    .rodape { background: var(--escuro); color: var(--escuro-texto); }
+    .rodape .container {
+      padding-top: 48px;
+      padding-bottom: 48px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 32px;
+      font-size: 16px;
+    }
+    .rodape-marca { display: flex; flex-direction: column; gap: 14px; max-width: 560px; }
+    .rodape .logo, .rodape .logo:hover { color: var(--branco); }
+    .rodape .logo-sub { color: var(--risco-0); }
+    .rodape-contato { display: flex; flex-direction: column; gap: 6px; }
+    .rodape-contato strong { color: var(--branco); }
+    .rodape a { color: var(--risco-0); }
+
+    /* =================================================================
+       12. CELULAR (telas com até 640px de largura)
+       Diminui os títulos e espaços para caberem na tela pequena.
+       ================================================================= */
+    @media (max-width: 640px) {
+      .container { padding: 56px 16px; }
+      .abertura h1 { font-size: 40px; }
+      .titulo-secao { font-size: 32px; }
+      .abertura-resumo { font-size: 19px; }
+      .menu { gap: 14px; font-size: 15px; }
+      .cabecalho { position: static; }   /* no celular o topo não fica preso */
+      .grade-modulos, .grade-fases { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
+
 <body>
-<div style="width: 100%; background: #F2F5F4; color: #12211F">
 
-<header style="background: #FFFFFF; border-bottom: 1px solid #D5DEDB">
-<div style="max-width: 1200px; margin: 0 auto; padding: 18px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
-<div style="display: flex; align-items: center; gap: 12px">
-<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15" fill="none" stroke="#0B6E5F" stroke-width="3"></circle><path d="M6 18h6l3-7 4 13 3-6h6" fill="none" stroke="#C26A10" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 21px; letter-spacing: -0.01em">Linha Viva Diabetes</span>
-</div>
-<nav aria-label="Seções" style="display: flex; flex-wrap: wrap; gap: 22px; font-size: 16px; font-weight: 600">
-<a href="#modulos" style="color: #12211F; text-decoration: none">Módulos</a>
-<a href="#risco" style="color: #12211F; text-decoration: none">Risco do pé</a>
-<a href="#ia" style="color: #12211F; text-decoration: none">IA assistiva</a>
-<a href="#implantacao" style="color: #12211F; text-decoration: none">Implantação</a>
-</nav>
-</div>
-</header>
+  <!-- =================================================================
+       CABEÇALHO: logo à esquerda, menu à direita
+       ================================================================= -->
+  <header class="cabecalho">
+    <div class="container">
 
-<section style="background: #FFFFFF">
-<div style="max-width: 1200px; margin: 0 auto; padding: 72px 24px 88px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
-<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
-<p class="mono" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #0B6E5F">Desafios Day · Secretaria Municipal de Saúde de Vicência</p>
-<h1 style="font-size: 60px; line-height: 1.04; font-weight: 800; letter-spacing: -0.025em">Quem precisa de cuidado hoje, em cada microárea.</h1>
-<p style="font-size: 21px; color: #3B4D4A; max-width: 560px">Um painel para a Atenção Primária que transforma os registros do e-SUS em listas de ação: avaliação dos pés, feridas, retornos e busca ativa das pessoas com diabetes.</p>
-<div style="display: flex; flex-wrap: wrap; gap: 14px">
-<a href="#modulos" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; background: #0B6E5F; color: #FFFFFF; border-radius: 8px; font-weight: 700; text-decoration: none">Ver a solução</a>
-<a href="#implantacao" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; border: 2px solid #12211F; color: #12211F; border-radius: 8px; font-weight: 700; text-decoration: none">Plano de implantação</a>
-</div>
-</div>
+      <!-- LOGO: símbolo (quadrado verde com linha de pulso) + nome.
+           Clicar na logo volta ao topo da página. -->
+      <a class="logo" href="#topo" aria-label="Linha Viva Diabetes, voltar ao início">
+        <svg class="logo-simbolo" viewBox="0 0 48 48" aria-hidden="true">
+          <!-- Fundo: quadrado verde de cantos arredondados -->
+          <rect width="48" height="48" rx="12" fill="#0B6E5F"></rect>
+          <!-- Linha de pulso (batimento): representa a "linha viva" do cuidado -->
+          <path d="M8 26h8l4-10 6 18 4-8h10" fill="none" stroke="#F6B35A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="logo-texto">
+          <span class="logo-nome">Linha Viva</span>
+          <span class="logo-sub">Diabetes</span>
+        </span>
+      </a>
 
-<div style="flex: 1 1 440px; min-width: 0; background: #12211F; color: #E8EFED; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
-<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap">
-<span style="font-weight: 700; font-size: 17px">Busca ativa · Microárea 04</span>
-<span class="mono" style="font-size: 12px; color: #9FB3AE">EXEMPLO · DADOS FICTÍCIOS</span>
-</div>
-<div style="display: flex; flex-direction: column; gap: 10px">
-<div style="background: #1C302D; border-radius: 10px; padding: 14px 16px; display: flex; gap: 14px; align-items: center">
-<span class="mono" style="flex: 0 0 auto; min-width: 74px; text-align: center; padding: 4px 8px; border-radius: 6px; background: #E0644A; color: #12211F; font-size: 13px">RISCO 3</span>
-<div style="min-width: 0"><p style="font-weight: 600">M. S., 67 anos</p><p style="font-size: 15px; color: #B8C9C5">Ferida sem reavaliação há 19 dias</p></div>
-</div>
-<div style="background: #1C302D; border-radius: 10px; padding: 14px 16px; display: flex; gap: 14px; align-items: center">
-<span class="mono" style="flex: 0 0 auto; min-width: 74px; text-align: center; padding: 4px 8px; border-radius: 6px; background: #E9A23B; color: #12211F; font-size: 13px">RISCO 2</span>
-<div style="min-width: 0"><p style="font-weight: 600">J. A., 58 anos</p><p style="font-size: 15px; color: #B8C9C5">Retorno da vascular vencido há 3 semanas</p></div>
-</div>
-<div style="background: #1C302D; border-radius: 10px; padding: 14px 16px; display: flex; gap: 14px; align-items: center">
-<span class="mono" style="flex: 0 0 auto; min-width: 74px; text-align: center; padding: 4px 8px; border-radius: 6px; background: #E9D46A; color: #12211F; font-size: 13px">RISCO 1</span>
-<div style="min-width: 0"><p style="font-weight: 600">R. L., 49 anos</p><p style="font-size: 15px; color: #B8C9C5">Sem avaliação dos pés há 14 meses</p></div>
-</div>
-<div style="background: #1C302D; border-radius: 10px; padding: 14px 16px; display: flex; gap: 14px; align-items: center">
-<span class="mono" style="flex: 0 0 auto; min-width: 74px; text-align: center; padding: 4px 8px; border-radius: 6px; background: #7FC7B4; color: #12211F; font-size: 13px">RISCO 0</span>
-<div style="min-width: 0"><p style="font-weight: 600">C. F., 61 anos</p><p style="font-size: 15px; color: #B8C9C5">HbA1c pendente desde a última consulta</p></div>
-</div>
-</div>
-<p style="font-size: 14px; color: #9FB3AE">Ordenado por risco e atraso. O ACS leva a lista para a visita; a equipe confirma cada classificação.</p>
-</div>
-</div>
-</section>
+      <!-- MENU: cada link pula para a seção com o mesmo id (ex.: #modulos) -->
+      <nav class="menu" aria-label="Seções">
+        <a href="#modulos">Módulos</a>
+        <a href="#risco">Risco do pé</a>
+        <a href="#ia">IA assistiva</a>
+        <a href="#implantacao">Implantação</a>
+      </nav>
+    </div>
+  </header>
 
-<section style="max-width: 1200px; margin: 0 auto; padding: 88px 24px 40px; display: flex; flex-direction: column; gap: 32px">
-<div style="max-width: 760px; display: flex; flex-direction: column; gap: 14px">
-<p class="mono" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #0B6E5F">O problema</p>
-<h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em">Os dados já existem. Falta transformá-los em ação.</h2>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px">
-<div style="background: #FFFFFF; border: 1px solid #D5DEDB; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 21px">Avaliação dos pés esquecida</h3><p style="color: #3B4D4A">Ninguém sabe ao certo quem está com a avaliação vencida, nem quem deveria ser reavaliado antes.</p></div>
-<div style="background: #FFFFFF; border: 1px solid #D5DEDB; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 21px">Encaminhamentos sem volta</h3><p style="color: #3B4D4A">A pessoa sai para o especialista e a equipe perde o fio até ela aparecer de novo, às vezes com complicação.</p></div>
-<div style="background: #FFFFFF; border: 1px solid #D5DEDB; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 21px">Busca ativa sem prioridade</h3><p style="color: #3B4D4A">O ACS visita sem saber quem tem risco maior, e a gestão não enxerga a população acompanhada por equipe.</p></div>
-</div>
-</section>
+  <main id="topo">
 
-<section id="modulos" style="max-width: 1200px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 32px">
-<div style="max-width: 760px; display: flex; flex-direction: column; gap: 14px">
-<p class="mono" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #0B6E5F">A solução</p>
-<h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em">Sete módulos, implantados aos poucos.</h2>
-<p style="color: #3B4D4A">Cada módulo funciona sozinho. A prefeitura começa pelo essencial e amplia conforme as equipes se adaptam.</p>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1px; background: #D5DEDB; border: 1px solid #D5DEDB; border-radius: 12px; overflow: hidden">
-<div style="background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 10px"><h3 style="font-size: 20px">Cadastro longitudinal</h3><p style="color: #3B4D4A; font-size: 17px">Importa dados do e-SUS APS e monta a linha do tempo de cada pessoa: consultas, HbA1c, pressão, pés, feridas e retornos.</p><p class="mono" style="font-size: 12px; color: #5C6E6A">TODA A EQUIPE</p></div>
-<div style="background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 10px"><h3 style="font-size: 20px">Estratificação de risco</h3><p style="color: #3B4D4A; font-size: 17px">Aplica a escala IWGDF de 0 a 3 e calcula quando cada pessoa deve ser reavaliada.</p><p class="mono" style="font-size: 12px; color: #5C6E6A">ENFERMAGEM E MEDICINA</p></div>
-<div style="background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 10px"><h3 style="font-size: 20px">Avaliação dos pés no celular</h3><p style="color: #3B4D4A; font-size: 17px">Formulário guiado com monofilamento, pulsos e deformidades. Funciona sem internet na zona rural.</p><p class="mono" style="font-size: 12px; color: #5C6E6A">ENFERMAGEM E MEDICINA</p></div>
-<div style="background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 10px"><h3 style="font-size: 20px">Acompanhamento de feridas</h3><p style="color: #3B4D4A; font-size: 17px">Registro com foto e medidas a cada curativo, com alerta de piora ou estagnação.</p><p class="mono" style="font-size: 12px; color: #5C6E6A">ENFERMAGEM</p></div>
-<div style="background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 10px"><h3 style="font-size: 20px">Encaminhamentos e retornos</h3><p style="color: #3B4D4A; font-size: 17px">Acompanha cada encaminhamento até o retorno e avisa quando o prazo vence sem contrarreferência.</p><p class="mono" style="font-size: 12px; color: #5C6E6A">EQUIPE E REGULAÇÃO</p></div>
-<div style="background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 10px"><h3 style="font-size: 20px">Busca ativa priorizada</h3><p style="color: #3B4D4A; font-size: 17px">Lista por microárea, ordenada por risco e atraso, pronta para a rotina de visitas.</p><p class="mono" style="font-size: 12px; color: #5C6E6A">AGENTES COMUNITÁRIOS</p></div>
-<div style="background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 10px"><h3 style="font-size: 20px">Painel do gestor</h3><p style="color: #3B4D4A; font-size: 17px">Cobertura de avaliação por equipe, pessoas por risco, feridas ativas e encaminhamentos pendentes.</p><p class="mono" style="font-size: 12px; color: #5C6E6A">GESTÃO MUNICIPAL</p></div>
-</div>
-</section>
+    <!-- ===============================================================
+         ABERTURA: a primeira coisa que a banca vê.
+         Esquerda: título e resumo. Direita: exemplo da tela do sistema.
+         =============================================================== -->
+    <section class="abertura">
+      <div class="container">
 
-<section id="risco" style="background: #12211F; color: #E8EFED">
-<div style="max-width: 1200px; margin: 0 auto; padding: 88px 24px; display: flex; flex-direction: column; gap: 36px">
-<div style="max-width: 760px; display: flex; flex-direction: column; gap: 14px">
-<p class="mono" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #7FC7B4">Risco do pé diabético</p>
-<h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; color: #FFFFFF">O risco define quando cada pessoa volta a ser avaliada.</h2>
-<p style="color: #B8C9C5">A classificação segue o consenso internacional IWGDF. O sistema sugere a categoria, o profissional confirma e a próxima data entra na agenda da equipe.</p>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
-<div style="border-top: 6px solid #7FC7B4; background: #1C302D; border-radius: 0 0 12px 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px"><p class="mono" style="font-size: 14px; color: #7FC7B4">RISCO 0 · MUITO BAIXO</p><p style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700; color: #FFFFFF">1 vez por ano</p><p style="font-size: 16px; color: #B8C9C5">Sem perda de sensibilidade nem doença arterial periférica.</p></div>
-<div style="border-top: 6px solid #E9D46A; background: #1C302D; border-radius: 0 0 12px 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px"><p class="mono" style="font-size: 14px; color: #E9D46A">RISCO 1 · BAIXO</p><p style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700; color: #FFFFFF">a cada 6–12 meses</p><p style="font-size: 16px; color: #B8C9C5">Perda de sensibilidade protetora ou doença arterial periférica.</p></div>
-<div style="border-top: 6px solid #E9A23B; background: #1C302D; border-radius: 0 0 12px 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px"><p class="mono" style="font-size: 14px; color: #E9A23B">RISCO 2 · MODERADO</p><p style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700; color: #FFFFFF">a cada 3–6 meses</p><p style="font-size: 16px; color: #B8C9C5">Combinação de fatores, como neuropatia com deformidade.</p></div>
-<div style="border-top: 6px solid #E0644A; background: #1C302D; border-radius: 0 0 12px 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px"><p class="mono" style="font-size: 14px; color: #E0644A">RISCO 3 · ALTO</p><p style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700; color: #FFFFFF">a cada 1–3 meses</p><p style="font-size: 16px; color: #B8C9C5">Histórico de úlcera, amputação ou doença renal terminal.</p></div>
-</div>
-</div>
-</section>
+        <div class="abertura-texto">
+          <p class="etiqueta">Desafios Day · Secretaria Municipal de Saúde de Vicência</p>
+          <h1>Quem precisa de cuidado hoje, em cada microárea.</h1>
+          <p class="abertura-resumo">Um painel para a Atenção Primária que transforma os registros do e-SUS em listas de ação: avaliação dos pés, feridas, retornos e busca ativa das pessoas com diabetes.</p>
+          <div class="botoes">
+            <a class="botao botao-principal" href="#modulos">Ver a solução</a>
+            <a class="botao botao-contorno" href="#implantacao">Plano de implantação</a>
+          </div>
+        </div>
 
-<section id="ia" style="max-width: 1200px; margin: 0 auto; padding: 88px 24px; display: flex; flex-wrap: wrap; gap: 48px">
-<div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
-<p class="mono" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #0B6E5F">IA assistiva</p>
-<h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em">A IA sugere. O profissional decide.</h2>
-<p style="color: #3B4D4A">Toda sugestão fica registrada com o nome de quem validou. A responsabilidade pelas decisões assistenciais continua com a equipe.</p>
-</div>
-<ol style="flex: 1 1 520px; min-width: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0; border-top: 1px solid #C7D3CF">
-<li style="padding: 20px 0; border-bottom: 1px solid #C7D3CF; display: flex; flex-direction: column; gap: 4px"><h3 style="font-size: 20px">Estrutura prontuários antigos</h3><p style="color: #3B4D4A; font-size: 17px">Encontra menções a ferida, amputação ou pé em evoluções de texto livre.</p></li>
-<li style="padding: 20px 0; border-bottom: 1px solid #C7D3CF; display: flex; flex-direction: column; gap: 4px"><h3 style="font-size: 20px">Sugere risco e prioridade</h3><p style="color: #3B4D4A; font-size: 17px">Propõe a categoria IWGDF e a ordem da busca ativa, para validação da equipe.</p></li>
-<li style="padding: 20px 0; border-bottom: 1px solid #C7D3CF; display: flex; flex-direction: column; gap: 4px"><h3 style="font-size: 20px">Analisa fotos de feridas</h3><p style="color: #3B4D4A; font-size: 17px">Estima a área e compara com registros anteriores para mostrar a evolução.</p></li>
-<li style="padding: 20px 0; border-bottom: 1px solid #C7D3CF; display: flex; flex-direction: column; gap: 4px"><h3 style="font-size: 20px">Resume antes da consulta</h3><p style="color: #3B4D4A; font-size: 17px">Mostra em poucas linhas o que mudou desde o último atendimento.</p></li>
-</ol>
-</section>
+        <!-- Exemplo de como o ACS veria a lista de busca ativa.
+             Os nomes são fictícios (só iniciais) para respeitar a LGPD. -->
+        <div class="painel-exemplo">
+          <div class="painel-topo">
+            <span class="painel-titulo">Busca ativa · Microárea 04</span>
+            <span class="painel-aviso">EXEMPLO · DADOS FICTÍCIOS</span>
+          </div>
 
-<section id="implantacao" style="background: #FFFFFF; border-top: 1px solid #D5DEDB">
-<div style="max-width: 1200px; margin: 0 auto; padding: 88px 24px; display: flex; flex-direction: column; gap: 48px">
-<div style="max-width: 760px; display: flex; flex-direction: column; gap: 14px">
-<p class="mono" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #0B6E5F">Implantação</p>
-<h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em">Começa com uma equipe piloto e cresce com a rede.</h2>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px">
-<div style="background: #E3F1ED; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<p class="mono" style="font-size: 13px; color: #0B6E5F">FASE 1 · MVP · 8 A 12 SEMANAS</p>
-<h3 style="font-size: 24px">O essencial para a busca ativa</h3>
-<p style="color: #2E403C">Cadastro longitudinal, estratificação de risco, avaliação dos pés no celular, busca ativa por microárea e um painel básico para a gestão.</p>
-</div>
-<div style="background: #F2F5F4; border: 1px dashed #A9B9B5; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<p class="mono" style="font-size: 13px; color: #5C6E6A">FASE 2 · EXPANSÃO · PRAZO A DEFINIR</p>
-<h3 style="font-size: 24px">Feridas, retornos e gestão completa</h3>
-<p style="color: #2E403C">Acompanhamento de feridas com IA, controle de encaminhamentos e retornos, painel completo e abertura para hipertensão e outras condições crônicas.</p>
-</div>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px">
-<div style="display: flex; flex-direction: column; gap: 6px"><h3 style="font-size: 19px">LGPD desde o início</h3><p style="color: #3B4D4A; font-size: 17px">Acesso por perfil, trilha de auditoria e hospedagem no Brasil para dados sensíveis de saúde.</p></div>
-<div style="display: flex; flex-direction: column; gap: 6px"><h3 style="font-size: 19px">Sem dupla digitação</h3><p style="color: #3B4D4A; font-size: 17px">Importação do e-SUS APS e padrões FHIR e RNDS sempre que tecnicamente possível.</p></div>
-<div style="display: flex; flex-direction: column; gap: 6px"><h3 style="font-size: 19px">Pensado para a zona rural</h3><p style="color: #3B4D4A; font-size: 17px">Registro offline no celular, com sincronização quando houver sinal.</p></div>
-</div>
-</div>
-</section>
+          <!-- Lista ordenada do maior risco (3) para o menor (0) -->
+          <div class="lista-pacientes">
+            <div class="paciente">
+              <span class="selo r3">RISCO 3</span>
+              <div><p class="paciente-nome">M. S., 67 anos</p><p class="paciente-motivo">Ferida sem reavaliação há 19 dias</p></div>
+            </div>
+            <div class="paciente">
+              <span class="selo r2">RISCO 2</span>
+              <div><p class="paciente-nome">J. A., 58 anos</p><p class="paciente-motivo">Retorno da vascular vencido há 3 semanas</p></div>
+            </div>
+            <div class="paciente">
+              <span class="selo r1">RISCO 1</span>
+              <div><p class="paciente-nome">R. L., 49 anos</p><p class="paciente-motivo">Sem avaliação dos pés há 14 meses</p></div>
+            </div>
+            <div class="paciente">
+              <span class="selo r0">RISCO 0</span>
+              <div><p class="paciente-nome">C. F., 61 anos</p><p class="paciente-motivo">HbA1c pendente desde a última consulta</p></div>
+            </div>
+          </div>
 
-<footer style="background: #12211F; color: #B8C9C5">
-<div style="max-width: 1200px; margin: 0 auto; padding: 48px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px">
-<div style="display: flex; flex-direction: column; gap: 6px; max-width: 560px">
-<p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 22px; color: #FFFFFF">Linha Viva Diabetes</p>
-<p style="font-size: 16px">Proposta para o desafio da Prefeitura Municipal de Vicência – Secretaria Municipal de Saúde, programa Desafios Day.</p>
-</div>
-<div style="display: flex; flex-direction: column; gap: 6px; font-size: 16px">
-<p style="color: #FFFFFF; font-weight: 600">Contato</p>
-<p>Equipe Linha Viva</p>
-<p><a href="mailto:diegoxzzsz@gmail.com" style="color: #7FC7B4">diegoxzzsz@gmail.com</a></p>
-</div>
-</div>
-</footer>
+          <p class="painel-rodape">Ordenado por risco e atraso. O ACS leva a lista para a visita; a equipe confirma cada classificação.</p>
+        </div>
 
-</div>
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         O PROBLEMA: as 3 dificuldades que o desafio da prefeitura descreve
+         =============================================================== -->
+    <section class="problema">
+      <div class="container">
+        <div class="intro">
+          <p class="etiqueta">O problema</p>
+          <h2 class="titulo-secao">Os dados já existem. Falta transformá-los em ação.</h2>
+        </div>
+
+        <div class="grade-problemas">
+          <div class="cartao">
+            <h3>Avaliação dos pés esquecida</h3>
+            <p>Ninguém sabe ao certo quem está com a avaliação vencida, nem quem deveria ser reavaliado antes.</p>
+          </div>
+          <div class="cartao">
+            <h3>Encaminhamentos sem volta</h3>
+            <p>A pessoa sai para o especialista e a equipe perde o fio até ela aparecer de novo, às vezes com complicação.</p>
+          </div>
+          <div class="cartao">
+            <h3>Busca ativa sem prioridade</h3>
+            <p>O ACS visita sem saber quem tem risco maior, e a gestão não enxerga a população acompanhada por equipe.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         A SOLUÇÃO: os 7 módulos. Cada um mostra o que faz e quem usa.
+         =============================================================== -->
+    <section class="solucao" id="modulos">
+      <div class="container">
+        <div class="intro">
+          <p class="etiqueta">A solução</p>
+          <h2 class="titulo-secao">Sete módulos, implantados aos poucos.</h2>
+          <p>Cada módulo funciona sozinho. A prefeitura começa pelo essencial e amplia conforme as equipes se adaptam.</p>
+        </div>
+
+        <div class="grade-modulos">
+          <!-- Módulo 1 -->
+          <div class="modulo">
+            <h3>Cadastro longitudinal</h3>
+            <p>Importa dados do e-SUS APS e monta a linha do tempo de cada pessoa: consultas, HbA1c, pressão, pés, feridas e retornos.</p>
+            <p class="quem">TODA A EQUIPE</p>
+          </div>
+          <!-- Módulo 2 -->
+          <div class="modulo">
+            <h3>Estratificação de risco</h3>
+            <p>Aplica a escala IWGDF de 0 a 3 e calcula quando cada pessoa deve ser reavaliada.</p>
+            <p class="quem">ENFERMAGEM E MEDICINA</p>
+          </div>
+          <!-- Módulo 3 -->
+          <div class="modulo">
+            <h3>Avaliação dos pés no celular</h3>
+            <p>Formulário guiado com monofilamento, pulsos e deformidades. Funciona sem internet na zona rural.</p>
+            <p class="quem">ENFERMAGEM E MEDICINA</p>
+          </div>
+          <!-- Módulo 4 -->
+          <div class="modulo">
+            <h3>Acompanhamento de feridas</h3>
+            <p>Registro com foto e medidas a cada curativo, com alerta de piora ou estagnação.</p>
+            <p class="quem">ENFERMAGEM</p>
+          </div>
+          <!-- Módulo 5 -->
+          <div class="modulo">
+            <h3>Encaminhamentos e retornos</h3>
+            <p>Acompanha cada encaminhamento até o retorno e avisa quando o prazo vence sem contrarreferência.</p>
+            <p class="quem">EQUIPE E REGULAÇÃO</p>
+          </div>
+          <!-- Módulo 6 -->
+          <div class="modulo">
+            <h3>Busca ativa priorizada</h3>
+            <p>Lista por microárea, ordenada por risco e atraso, pronta para a rotina de visitas.</p>
+            <p class="quem">AGENTES COMUNITÁRIOS</p>
+          </div>
+          <!-- Módulo 7 -->
+          <div class="modulo">
+            <h3>Painel do gestor</h3>
+            <p>Cobertura de avaliação por equipe, pessoas por risco, feridas ativas e encaminhamentos pendentes.</p>
+            <p class="quem">GESTÃO MUNICIPAL</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         RISCO DO PÉ DIABÉTICO: os 4 níveis da escala IWGDF
+         e de quanto em quanto tempo cada pessoa deve ser reavaliada.
+         =============================================================== -->
+    <section class="risco" id="risco">
+      <div class="container">
+        <div class="intro">
+          <p class="etiqueta">Risco do pé diabético</p>
+          <h2 class="titulo-secao">O risco define quando cada pessoa volta a ser avaliada.</h2>
+          <p>A classificação segue o consenso internacional IWGDF. O sistema sugere a categoria, o profissional confirma e a próxima data entra na agenda da equipe.</p>
+        </div>
+
+        <div class="grade-risco">
+          <div class="nivel r0">
+            <p class="nivel-nome">RISCO 0 · MUITO BAIXO</p>
+            <p class="nivel-prazo">1 vez por ano</p>
+            <p class="nivel-criterio">Sem perda de sensibilidade nem doença arterial periférica.</p>
+          </div>
+          <div class="nivel r1">
+            <p class="nivel-nome">RISCO 1 · BAIXO</p>
+            <p class="nivel-prazo">a cada 6–12 meses</p>
+            <p class="nivel-criterio">Perda de sensibilidade protetora ou doença arterial periférica.</p>
+          </div>
+          <div class="nivel r2">
+            <p class="nivel-nome">RISCO 2 · MODERADO</p>
+            <p class="nivel-prazo">a cada 3–6 meses</p>
+            <p class="nivel-criterio">Combinação de fatores, como neuropatia com deformidade.</p>
+          </div>
+          <div class="nivel r3">
+            <p class="nivel-nome">RISCO 3 · ALTO</p>
+            <p class="nivel-prazo">a cada 1–3 meses</p>
+            <p class="nivel-criterio">Histórico de úlcera, amputação ou doença renal terminal.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         IA ASSISTIVA: onde a inteligência artificial ajuda,
+         sempre com a decisão final do profissional de saúde.
+         =============================================================== -->
+    <section class="ia" id="ia">
+      <div class="container">
+        <div class="intro">
+          <p class="etiqueta">IA assistiva</p>
+          <h2 class="titulo-secao">A IA sugere. O profissional decide.</h2>
+          <p>Toda sugestão fica registrada com o nome de quem validou. A responsabilidade pelas decisões assistenciais continua com a equipe.</p>
+        </div>
+
+        <ol class="lista-ia">
+          <li>
+            <h3>Estrutura prontuários antigos</h3>
+            <p>Encontra menções a ferida, amputação ou pé em evoluções de texto livre.</p>
+          </li>
+          <li>
+            <h3>Sugere risco e prioridade</h3>
+            <p>Propõe a categoria IWGDF e a ordem da busca ativa, para validação da equipe.</p>
+          </li>
+          <li>
+            <h3>Analisa fotos de feridas</h3>
+            <p>Estima a área e compara com registros anteriores para mostrar a evolução.</p>
+          </li>
+          <li>
+            <h3>Resume antes da consulta</h3>
+            <p>Mostra em poucas linhas o que mudou desde o último atendimento.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         IMPLANTAÇÃO: as duas fases do projeto e os requisitos
+         que o edital valoriza (LGPD, integração, uso offline).
+         =============================================================== -->
+    <section class="implantacao" id="implantacao">
+      <div class="container">
+        <div class="intro">
+          <p class="etiqueta">Implantação</p>
+          <h2 class="titulo-secao">Começa com uma equipe piloto e cresce com a rede.</h2>
+        </div>
+
+        <!-- Fases: a Fase 1 em destaque, a Fase 2 com borda tracejada (futura) -->
+        <div class="grade-fases">
+          <div class="fase fase-1">
+            <p class="etiqueta">Fase 1 · MVP · 8 a 12 semanas</p>
+            <h3>O essencial para a busca ativa</h3>
+            <p>Cadastro longitudinal, estratificação de risco, avaliação dos pés no celular, busca ativa por microárea e um painel básico para a gestão.</p>
+          </div>
+          <div class="fase fase-2">
+            <p class="etiqueta">Fase 2 · Expansão · Prazo a definir</p>
+            <h3>Feridas, retornos e gestão completa</h3>
+            <p>Acompanhamento de feridas com IA, controle de encaminhamentos e retornos, painel completo e abertura para hipertensão e outras condições crônicas.</p>
+          </div>
+        </div>
+
+        <!-- Requisitos técnicos -->
+        <div class="grade-requisitos">
+          <div class="requisito">
+            <h3>LGPD desde o início</h3>
+            <p>Acesso por perfil, trilha de auditoria e hospedagem no Brasil para dados sensíveis de saúde.</p>
+          </div>
+          <div class="requisito">
+            <h3>Sem dupla digitação</h3>
+            <p>Importação do e-SUS APS e padrões FHIR e RNDS sempre que tecnicamente possível.</p>
+          </div>
+          <div class="requisito">
+            <h3>Pensado para a zona rural</h3>
+            <p>Registro offline no celular, com sincronização quando houver sinal.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =================================================================
+       RODAPÉ: logo, sobre o projeto e contato da equipe
+       ================================================================= -->
+  <footer class="rodape">
+    <div class="container">
+
+      <div class="rodape-marca">
+        <!-- Mesma logo do topo, em versão para fundo escuro -->
+        <a class="logo" href="#topo" aria-label="Voltar ao início">
+          <svg class="logo-simbolo" viewBox="0 0 48 48" aria-hidden="true">
+            <rect width="48" height="48" rx="12" fill="#0B6E5F"></rect>
+            <path d="M8 26h8l4-10 6 18 4-8h10" fill="none" stroke="#F6B35A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="logo-texto">
+            <span class="logo-nome">Linha Viva</span>
+            <span class="logo-sub">Diabetes</span>
+          </span>
+        </a>
+        <p>Proposta para o desafio da Prefeitura Municipal de Vicência – Secretaria Municipal de Saúde, programa Desafios Day.</p>
+      </div>
+
+      <div class="rodape-contato">
+        <strong>Contato</strong>
+        <p>Equipe Linha Viva</p>
+        <p><a href="mailto:diegoxzzsz@gmail.com">diegoxzzsz@gmail.com</a></p>
+      </div>
+
+    </div>
+  </footer>
+
 </body>
 </html>
