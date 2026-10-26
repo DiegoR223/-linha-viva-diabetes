@@ -1,97 +1,90 @@
 <!doctype html>
 <!--
   =====================================================================
-  LINHA VIVA DIABETES — Página de apresentação
-  Equipe Linha Viva · Desafios Day · Prefeitura Municipal de Vicência
+  Linha Viva Diabetes · Página institucional
   =====================================================================
+  Projeto   Proposta para o Desafios Day — Secretaria Municipal de Saúde
+            de Vicência (linha de cuidado da pessoa com diabetes na APS)
+  Autoria   Equipe Linha Viva
+  Versão    1.0 · outubro de 2026
+  Contato   diegoxzzsz@gmail.com
 
-  COMO ESTE ARQUIVO ESTÁ ORGANIZADO
-  1. <head>   → informações da página, fontes e todo o visual (CSS)
-  2. <body>   → o conteúdo, dividido em seções, na ordem em que aparecem:
-       • Cabeçalho (logo + menu)
-       • Abertura (título principal + exemplo de busca ativa)
-       • O problema
-       • A solução (7 módulos)
-       • Risco do pé diabético (escala IWGDF)
-       • IA assistiva
-       • Implantação (fases e requisitos)
-       • Rodapé (contato)
+  Estrutura
+    <head>  Metadados, tipografia e folha de estilos
+    <body>  Cabeçalho · Abertura · Problema · Solução · Estratificação
+            de risco · IA assistiva · Implantação · Rodapé
 
-  Todo o visual fica no bloco <style>. O conteúdo (textos) fica no <body>.
-  Para mudar uma cor do site inteiro, basta trocar a variável em :root.
+  Padrões adotados
+    - Design tokens centralizados em :root (cores, tipografia, layout)
+    - Classes nomeadas por componente, em português
+    - Layout responsivo com Flexbox e Grid; ajuste mobile ≤ 640px
+    - Acessibilidade: HTML semântico, aria-label e foco visível
+    - Arquivo único, sem dependências além do Google Fonts
 -->
 <html lang="pt-BR">
 <head>
-  <!-- Codificação de caracteres: garante que acentos (á, ç, ã) apareçam certo -->
+  <!-- Metadados -->
   <meta charset="utf-8">
-
-  <!-- Faz o site se ajustar à tela do celular -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Título que aparece na aba do navegador -->
   <title>Linha Viva Diabetes</title>
-
-  <!-- Descrição usada por buscadores e ao compartilhar o link -->
   <meta name="description" content="Proposta da Equipe Linha Viva para a linha de cuidado das pessoas com diabetes na Atenção Primária de Vicência.">
 
-  <!-- Ícone da aba (favicon): a mesma logo do topo, em versão pequena -->
+  <!-- Favicon (SVG embutido) -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%230B6E5F'/%3E%3Cpath d='M8 26h8l4-10 6 18 4-8h10' fill='none' stroke='%23F6B35A' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
-  <!-- Fontes do Google Fonts:
-       • Bricolage Grotesque → títulos
-       • Source Sans 3       → textos
-       • IBM Plex Mono       → etiquetas pequenas (estilo "dado técnico") -->
+  <!-- Tipografia: Bricolage Grotesque (títulos), Source Sans 3 (texto),
+       IBM Plex Mono (rótulos e dados) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=Source+Sans+3:wght@400;600;700&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap">
 
   <style>
     /* =================================================================
-       1. VARIÁVEIS (cores e fontes do site)
-       Trocar um valor aqui muda o site inteiro.
+       1. DESIGN TOKENS
+       Paleta, tipografia e dimensões globais.
        ================================================================= */
     :root {
-      /* Cores principais */
-      --verde:          #0B6E5F;  /* cor da marca: botões, links, etiquetas */
-      --verde-escuro:   #084F45;  /* verde ao passar o mouse */
-      --verde-claro:    #E3F1ED;  /* fundo do card da Fase 1 */
-      --laranja-claro:  #F6B35A;  /* linha de pulso da logo */
+      /* Marca */
+      --verde:          #0B6E5F;  /* primária: ações e destaques */
+      --verde-escuro:   #084F45;  /* estado hover */
+      --verde-claro:    #E3F1ED;  /* superfície de destaque */
+      --laranja-claro:  #F6B35A;  /* acento do símbolo */
 
-      /* Neutros (fundos e textos) */
-      --fundo:          #F2F5F4;  /* fundo geral da página */
+      /* Neutros */
+      --fundo:          #F2F5F4;  /* superfície base */
       --branco:         #FFFFFF;
-      --texto:          #12211F;  /* texto principal (quase preto) */
-      --texto-suave:    #3B4D4A;  /* parágrafos */
-      --texto-apagado:  #5C6E6A;  /* legendas pequenas */
-      --borda:          #D5DEDB;  /* linhas e contornos */
+      --texto:          #12211F;  /* texto primário */
+      --texto-suave:    #3B4D4A;  /* texto secundário */
+      --texto-apagado:  #5C6E6A;  /* texto terciário */
+      --borda:          #D5DEDB;  /* divisores */
 
-      /* Seções escuras (exemplo de busca ativa, risco, rodapé) */
+      /* Superfícies escuras */
       --escuro:         #12211F;
       --escuro-card:    #1C302D;
       --escuro-texto:   #B8C9C5;
       --escuro-legenda: #9FB3AE;
 
-      /* Cores da escala de risco (0 = menor, 3 = maior) */
+      /* Escala de risco IWGDF (0 a 3) */
       --risco-0: #7FC7B4;
       --risco-1: #E9D46A;
       --risco-2: #E9A23B;
       --risco-3: #E0644A;
 
-      /* Fontes */
+      /* Tipografia */
       --fonte-titulo: "Bricolage Grotesque", "Source Sans 3", system-ui, sans-serif;
       --fonte-texto:  "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
       --fonte-mono:   "IBM Plex Mono", ui-monospace, Menlo, monospace;
 
-      /* Largura máxima do conteúdo */
+      /* Layout */
       --largura: 1200px;
     }
 
     /* =================================================================
-       2. BASE (regras que valem para a página toda)
+       2. BASE
        ================================================================= */
     * { box-sizing: border-box; }
 
-    html { scroll-behavior: smooth; }   /* rolagem suave ao clicar no menu */
+    html { scroll-behavior: smooth; }   /* navegação por âncoras */
 
     body {
       margin: 0;
@@ -105,7 +98,7 @@
     h1, h2, h3 {
       font-family: var(--fonte-titulo);
       margin: 0;
-      text-wrap: balance;   /* equilibra as linhas dos títulos */
+      text-wrap: balance;   /* quebra de linha equilibrada */
     }
 
     p, ol { margin: 0; }
@@ -113,21 +106,21 @@
     a { color: var(--verde); }
     a:hover { color: var(--verde-escuro); }
 
-    /* Contorno visível ao navegar pelo teclado (acessibilidade) */
+    /* Acessibilidade: foco visível na navegação por teclado */
     a:focus-visible { outline: 3px solid var(--verde); outline-offset: 3px; }
 
     /* =================================================================
-       3. PEÇAS REUTILIZÁVEIS (usadas em várias seções)
+       3. COMPONENTES COMPARTILHADOS
        ================================================================= */
 
-    /* Caixa central que limita a largura do conteúdo */
+    /* Contêiner de largura máxima */
     .container {
       max-width: var(--largura);
       margin: 0 auto;
       padding: 88px 24px;
     }
 
-    /* Etiqueta pequena em maiúsculas acima dos títulos ("O PROBLEMA") */
+    /* Rótulo de seção */
     .etiqueta {
       font-family: var(--fonte-mono);
       font-size: 13px;
@@ -136,7 +129,7 @@
       color: var(--verde);
     }
 
-    /* Bloco de introdução de cada seção: etiqueta + título + texto */
+    /* Cabeçalho de seção: rótulo, título e descrição */
     .intro {
       max-width: 760px;
       display: flex;
@@ -169,12 +162,12 @@
     .botao-contorno:hover { background: var(--texto); color: var(--branco); }
 
     /* =================================================================
-       4. CABEÇALHO (logo + menu)
+       4. CABEÇALHO
        ================================================================= */
     .cabecalho {
       background: var(--branco);
       border-bottom: 1px solid var(--borda);
-      position: sticky;     /* fica preso no topo ao rolar a página */
+      position: sticky;     /* fixo durante a rolagem */
       top: 0;
       z-index: 10;
     }
@@ -188,7 +181,7 @@
       gap: 16px;
     }
 
-    /* Logo: símbolo + nome */
+    /* Marca */
     .logo {
       display: flex;
       align-items: center;
@@ -214,7 +207,7 @@
       margin-top: 5px;
     }
 
-    /* Menu de navegação */
+    /* Navegação */
     .menu {
       display: flex;
       flex-wrap: wrap;
@@ -226,7 +219,7 @@
     .menu a:hover { color: var(--verde); }
 
     /* =================================================================
-       5. ABERTURA (primeira tela)
+       5. ABERTURA
        ================================================================= */
     .abertura { background: var(--branco); }
     .abertura .container {
@@ -252,7 +245,7 @@
     .abertura-resumo { font-size: 21px; color: var(--texto-suave); max-width: 560px; }
     .botoes { display: flex; flex-wrap: wrap; gap: 14px; }
 
-    /* Painel escuro com o exemplo de busca ativa */
+    /* Painel demonstrativo: lista de busca ativa */
     .painel-exemplo {
       flex: 1 1 440px;
       min-width: 0;
@@ -275,7 +268,7 @@
     .painel-aviso { font-family: var(--fonte-mono); font-size: 12px; color: var(--escuro-legenda); }
     .lista-pacientes { display: flex; flex-direction: column; gap: 10px; }
 
-    /* Cada linha da lista: selo de risco + nome + motivo */
+    /* Item da lista: selo de risco, identificação e pendência */
     .paciente {
       background: var(--escuro-card);
       border-radius: 10px;
@@ -288,7 +281,7 @@
     .paciente-motivo { font-size: 15px; color: var(--escuro-texto); }
     .painel-rodape { font-size: 14px; color: var(--escuro-legenda); }
 
-    /* Selo colorido "RISCO 0…3" */
+    /* Selo de risco */
     .selo {
       flex: 0 0 auto;
       min-width: 74px;
@@ -305,7 +298,7 @@
     .selo.r3 { background: var(--risco-3); }
 
     /* =================================================================
-       6. O PROBLEMA (3 cartões)
+       6. PROBLEMA
        ================================================================= */
     .problema .container { padding-bottom: 40px; display: flex; flex-direction: column; gap: 32px; }
     .grade-problemas {
@@ -326,13 +319,13 @@
     .cartao p { color: var(--texto-suave); }
 
     /* =================================================================
-       7. A SOLUÇÃO (grade com os 7 módulos)
+       7. SOLUÇÃO: MÓDULOS
        ================================================================= */
     .solucao .container { padding-top: 72px; padding-bottom: 72px; display: flex; flex-direction: column; gap: 32px; }
     .grade-modulos {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1px;                       /* o espaço de 1px vira a linha divisória */
+      gap: 1px;                       /* gap de 1px usado como divisor */
       background: var(--borda);
       border: 1px solid var(--borda);
       border-radius: 12px;
@@ -347,14 +340,14 @@
     }
     .modulo h3 { font-size: 20px; }
     .modulo p { color: var(--texto-suave); font-size: 17px; }
-    .modulo .quem {                   /* quem usa o módulo */
+    .modulo .quem {                   /* perfil de usuário */
       font-family: var(--fonte-mono);
       font-size: 12px;
       color: var(--texto-apagado);
     }
 
     /* =================================================================
-       8. RISCO DO PÉ DIABÉTICO (seção escura, 4 níveis)
+       8. ESTRATIFICAÇÃO DE RISCO
        ================================================================= */
     .risco { background: var(--escuro); color: #E8EFED; }
     .risco .container { display: flex; flex-direction: column; gap: 36px; }
@@ -369,7 +362,7 @@
     }
     .nivel {
       background: var(--escuro-card);
-      border-top: 6px solid;          /* a cor vem das classes .r0 a .r3 */
+      border-top: 6px solid;          /* cor definida por .r0 a .r3 */
       border-radius: 0 0 12px 12px;
       padding: 22px;
       display: flex;
@@ -390,7 +383,7 @@
     .nivel.r3 { border-color: var(--risco-3); } .nivel.r3 .nivel-nome { color: var(--risco-3); }
 
     /* =================================================================
-       9. IA ASSISTIVA (texto à esquerda, lista à direita)
+       9. IA ASSISTIVA
        ================================================================= */
     .ia .container { display: flex; flex-wrap: wrap; gap: 48px; }
     .ia .intro { flex: 1 1 360px; min-width: 0; }
@@ -412,7 +405,7 @@
     .lista-ia p { color: var(--texto-suave); font-size: 17px; }
 
     /* =================================================================
-       10. IMPLANTAÇÃO (fases + requisitos)
+       10. IMPLANTAÇÃO
        ================================================================= */
     .implantacao { background: var(--branco); border-top: 1px solid var(--borda); }
     .implantacao .container { display: flex; flex-direction: column; gap: 48px; }
@@ -431,7 +424,7 @@
     .fase h3 { font-size: 24px; }
     .fase p:last-child { color: #2E403C; }
     .fase-1 { background: var(--verde-claro); }
-    .fase-2 { background: var(--fundo); border: 1px dashed #A9B9B5; }   /* tracejado = fase futura */
+    .fase-2 { background: var(--fundo); border: 1px dashed #A9B9B5; }   /* fase planejada */
     .fase-2 .etiqueta { color: var(--texto-apagado); }
 
     .grade-requisitos {
@@ -464,8 +457,7 @@
     .rodape a { color: var(--risco-0); }
 
     /* =================================================================
-       12. CELULAR (telas com até 640px de largura)
-       Diminui os títulos e espaços para caberem na tela pequena.
+       12. RESPONSIVO (até 640px)
        ================================================================= */
     @media (max-width: 640px) {
       .container { padding: 56px 16px; }
@@ -473,7 +465,7 @@
       .titulo-secao { font-size: 32px; }
       .abertura-resumo { font-size: 19px; }
       .menu { gap: 14px; font-size: 15px; }
-      .cabecalho { position: static; }   /* no celular o topo não fica preso */
+      .cabecalho { position: static; }   /* cabeçalho estático no mobile */
       .grade-modulos, .grade-fases { grid-template-columns: 1fr; }
     }
   </style>
@@ -482,18 +474,16 @@
 <body>
 
   <!-- =================================================================
-       CABEÇALHO: logo à esquerda, menu à direita
+       CABEÇALHO
        ================================================================= -->
   <header class="cabecalho">
     <div class="container">
 
-      <!-- LOGO: símbolo (quadrado verde com linha de pulso) + nome.
-           Clicar na logo volta ao topo da página. -->
+      <!-- Marca: símbolo e logotipo (âncora para o topo) -->
       <a class="logo" href="#topo" aria-label="Linha Viva Diabetes, voltar ao início">
         <svg class="logo-simbolo" viewBox="0 0 48 48" aria-hidden="true">
-          <!-- Fundo: quadrado verde de cantos arredondados -->
+          <!-- Símbolo: linha de pulso sobre base verde -->
           <rect width="48" height="48" rx="12" fill="#0B6E5F"></rect>
-          <!-- Linha de pulso (batimento): representa a "linha viva" do cuidado -->
           <path d="M8 26h8l4-10 6 18 4-8h10" fill="none" stroke="#F6B35A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
         <span class="logo-texto">
@@ -502,7 +492,7 @@
         </span>
       </a>
 
-      <!-- MENU: cada link pula para a seção com o mesmo id (ex.: #modulos) -->
+      <!-- Navegação por âncoras -->
       <nav class="menu" aria-label="Seções">
         <a href="#modulos">Módulos</a>
         <a href="#risco">Risco do pé</a>
@@ -515,8 +505,7 @@
   <main id="topo">
 
     <!-- ===============================================================
-         ABERTURA: a primeira coisa que a banca vê.
-         Esquerda: título e resumo. Direita: exemplo da tela do sistema.
+         ABERTURA · Proposta de valor e demonstração da busca ativa
          =============================================================== -->
     <section class="abertura">
       <div class="container">
@@ -531,15 +520,14 @@
           </div>
         </div>
 
-        <!-- Exemplo de como o ACS veria a lista de busca ativa.
-             Os nomes são fictícios (só iniciais) para respeitar a LGPD. -->
+        <!-- Demonstração: lista de busca ativa do ACS (dados fictícios e anonimizados) -->
         <div class="painel-exemplo">
           <div class="painel-topo">
             <span class="painel-titulo">Busca ativa · Microárea 04</span>
             <span class="painel-aviso">EXEMPLO · DADOS FICTÍCIOS</span>
           </div>
 
-          <!-- Lista ordenada do maior risco (3) para o menor (0) -->
+          <!-- Ordenação: risco decrescente e tempo de atraso -->
           <div class="lista-pacientes">
             <div class="paciente">
               <span class="selo r3">RISCO 3</span>
@@ -566,7 +554,7 @@
     </section>
 
     <!-- ===============================================================
-         O PROBLEMA: as 3 dificuldades que o desafio da prefeitura descreve
+         PROBLEMA · Lacunas apontadas no desafio
          =============================================================== -->
     <section class="problema">
       <div class="container">
@@ -593,7 +581,7 @@
     </section>
 
     <!-- ===============================================================
-         A SOLUÇÃO: os 7 módulos. Cada um mostra o que faz e quem usa.
+         SOLUÇÃO · Arquitetura modular (7 módulos)
          =============================================================== -->
     <section class="solucao" id="modulos">
       <div class="container">
@@ -651,8 +639,7 @@
     </section>
 
     <!-- ===============================================================
-         RISCO DO PÉ DIABÉTICO: os 4 níveis da escala IWGDF
-         e de quanto em quanto tempo cada pessoa deve ser reavaliada.
+         ESTRATIFICAÇÃO DE RISCO · Classificação IWGDF e periodicidade de reavaliação
          =============================================================== -->
     <section class="risco" id="risco">
       <div class="container">
@@ -688,8 +675,7 @@
     </section>
 
     <!-- ===============================================================
-         IA ASSISTIVA: onde a inteligência artificial ajuda,
-         sempre com a decisão final do profissional de saúde.
+         IA ASSISTIVA · Aplicações com supervisão profissional
          =============================================================== -->
     <section class="ia" id="ia">
       <div class="container">
@@ -721,8 +707,7 @@
     </section>
 
     <!-- ===============================================================
-         IMPLANTAÇÃO: as duas fases do projeto e os requisitos
-         que o edital valoriza (LGPD, integração, uso offline).
+         IMPLANTAÇÃO · Roadmap e requisitos não funcionais
          =============================================================== -->
     <section class="implantacao" id="implantacao">
       <div class="container">
@@ -731,7 +716,7 @@
           <h2 class="titulo-secao">Começa com uma equipe piloto e cresce com a rede.</h2>
         </div>
 
-        <!-- Fases: a Fase 1 em destaque, a Fase 2 com borda tracejada (futura) -->
+        <!-- Roadmap -->
         <div class="grade-fases">
           <div class="fase fase-1">
             <p class="etiqueta">Fase 1 · MVP · 8 a 12 semanas</p>
@@ -745,7 +730,7 @@
           </div>
         </div>
 
-        <!-- Requisitos técnicos -->
+        <!-- Requisitos não funcionais -->
         <div class="grade-requisitos">
           <div class="requisito">
             <h3>LGPD desde o início</h3>
@@ -766,13 +751,13 @@
   </main>
 
   <!-- =================================================================
-       RODAPÉ: logo, sobre o projeto e contato da equipe
+       RODAPÉ · Identificação e contato
        ================================================================= -->
   <footer class="rodape">
     <div class="container">
 
       <div class="rodape-marca">
-        <!-- Mesma logo do topo, em versão para fundo escuro -->
+        <!-- Marca: variação para fundo escuro -->
         <a class="logo" href="#topo" aria-label="Voltar ao início">
           <svg class="logo-simbolo" viewBox="0 0 48 48" aria-hidden="true">
             <rect width="48" height="48" rx="12" fill="#0B6E5F"></rect>
